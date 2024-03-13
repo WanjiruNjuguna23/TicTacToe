@@ -1,14 +1,7 @@
-# import tkinter as tk
-# from tkinter import messagebox
-# from Player import HumanPlayer
-# from Player import SmartComputerPlayer
-# from TicTac import TicTacToe
-
 import tkinter as tk
 from tkinter import messagebox
 from Player import HumanPlayer, SmartComputerPlayer
 from TicTac import TicTacToe
-
 
 class TicTacToeGUI:
     def __init__(self):
@@ -30,26 +23,25 @@ class TicTacToeGUI:
         self.window.mainloop()
 
     def make_move(self, button_index):
-        button = self.buttons[button_index]
-        if button['text'] == '':
-            if self.game.make_move(button_index):
-                button.config(text=self.current_player)
-                if self.game.winner(self.current_player):
-                    messagebox.showinfo("Game Over", f"Player {self.current_player} wins!")
-                    self.reset_game()
-                elif not self.game.empty_squares():
-                    messagebox.showinfo("Game Over", "It's a tie!")
-                    self.reset_game()
-                else:
-                    self.current_player = 'O' if self.current_player == 'X' else 'X'
-                    if isinstance(self.game.current_player, SmartComputerPlayer) and self.current_player == 'O':
-                        self.make_computer_move()
+        if self.game.make_move(button_index):
+            button = self.buttons[button_index]
+            button.config(text=self.current_player)
+            if self.game.winner(self.current_player):
+                messagebox.showinfo("Game Over", f"Player {self.current_player} wins!")
+                self.reset_game()
+            elif not self.game.empty_squares():
+                messagebox.showinfo("Game Over", "It's a tie!")
+                self.reset_game()
+            else:
+                self.current_player = 'O' if self.current_player == 'X' else 'X'
+                if isinstance(self.game.current_player, SmartComputerPlayer) and self.current_player == 'O':
+                    self.make_computer_move()
 
     def make_computer_move(self):
         move = self.game.current_player.get_move(self.game)
         self.game.make_move(move)
         self.update_board()
-        if self.game.winner():
+        if self.game.winner(self.current_player):
             messagebox.showinfo("Game Over", f"Player {self.current_player} wins!")
             self.reset_game()
         elif not self.game.empty_squares():
@@ -60,21 +52,6 @@ class TicTacToeGUI:
             if isinstance(self.game.current_player, SmartComputerPlayer) and self.current_player == 'O':
                 self.make_computer_move()
 
-    # def make_computer_move(self):
-    #     move = self.game.current_player.get_move(self.game)
-    #     self.game.make_move(move)
-    #     self.update_board()
-    #     if self.game.winner(self.current_player):
-    #         messagebox.showinfo("Game Over", f"Player {self.current_player} wins!")
-    #         self.reset_game()
-    #     elif not self.game.empty_squares():
-    #         messagebox.showinfo("Game Over", "It's a tie!")
-    #         self.reset_game()
-    #     else:
-    #         self.current_player = 'O' if self.current_player == 'X' else 'X'
-    #         if isinstance(self.game.current_player, SmartComputerPlayer) and self.current_player == 'O':
-    #             self.make_computer_move()
-
     def update_board(self):
         for i, button in enumerate(self.buttons):
             button['text'] = self.game.board[i]
@@ -83,7 +60,6 @@ class TicTacToeGUI:
         self.game = TicTacToe()
         self.current_player = 'X'
         self.update_board()
-
 
 if __name__ == "__main__":
     TicTacToeGUI()
